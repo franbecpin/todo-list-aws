@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    
-    environment {
-        PATH = "${HOME}/.local/bin:${PATH}"
-      }
 
     stages {
         stage('Get Code') {
