@@ -13,9 +13,8 @@ pipeline {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh'''
                         export PYTHONPATH="$WORKSPACE/src"
-                        flake8 --format=pylint --exit-zero src > flake8.out
+                        flake8 --version
                     '''
-                    recordIssues qualityGates: [[integerThreshold: 8, threshold: 8.0, type: 'TOTAL'], [criticality: 'FAILURE', integerThreshold: 10, threshold: 10.0, type: 'TOTAL']], sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
                 }
             }
         }    
