@@ -1,0 +1,11 @@
+pipeline {
+    agent any
+    stages {
+     stage('Get Code') {
+            steps {
+                deleteDir()
+                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"                
+            }
+        }    
+    }
+}
