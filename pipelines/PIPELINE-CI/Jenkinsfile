@@ -1,24 +1,15 @@
 pipeline {
-    agent any
-    stages {
-        stage('Get Code') {
-            steps {
-                deleteDir()
-                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"                
-            }
-        } 
-        
-        stage ('Static Test'){
-            steps{
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    sh'''
-                        export PYTHONPATH="$WORKSPACE/src"
-                        flake8 --version
-                        flake8 --format=pylint --exit-zero src > flake8.out
-                    '''
-                    recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(reportEncoding: 'flake8.out')]
-                }
-            }
-        }    
+  agent any
+  stages {
+    stage('Build') {
+      steps {
+        echo 'Building...'
+      }
     }
+    stage('Test') {
+      steps {
+        echo 'Testing...'
+      }
+    }
+  }
 }
