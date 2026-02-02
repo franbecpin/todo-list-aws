@@ -21,7 +21,6 @@ pipeline
                 {
                     sh'''
                         export PYTHONPATH="$WORKSPACE/src"
-                        flake8 --version
                         flake8 --format=pylint --exit-zero --verbose src > flake8.out
                     '''
                     recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
@@ -54,8 +53,7 @@ pipeline
                     pip install bandit
     
                     # Ejecutar Bandit desde el venv
-                    bandit -r src -vv
-                    bandit --exit-zero -r src . -x venv,.venv,tests,build,dist -f txt -o bandit.out 
+                    bandit --exit-zero -r src -vv . -x venv,.venv,tests,build,dist -f txt -o bandit.out 
                     '''
     
                     recordIssues(sourceCodeRetention: 'LAST_BUILD',  tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')])
