@@ -37,7 +37,7 @@ pipeline {
                     python3 -m pip install --user --upgrade bandit
                     
                     # Emitir en formato pylint para que pyLint(...) pueda parsearlo
-                    python3 -m bandit -r . -x venv,.venv,tests,build,dist \ -f pylint -o bandit.out  ''', shell: '/bin/bash')
+                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f pylint -o bandit.out  ''', shell: '/bin/bash')
                     
                     // Publica usando el parser de pylint
                     recordIssues(sourceCodeRetention: 'LAST_BUILD',tools: [pyLint(pattern: 'bandit.out')])
