@@ -28,19 +28,27 @@ pipeline {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
 
-                    sh(script: '''#!/bin/bash
+                    sh '''#!/bin/bash
                     set -euxo pipefail
-
-                    export PATH="$HOME/.local/bin:$PATH"
-
-                    python3 -m pip install --user --upgrade pip
-                    python3 -m pip install --user --upgrade bandit
-
-                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out''')
-
+    
+                    # Crear entorno virtual aislado en el workspace
+                    python3 -m venv .venv
+    
+                    # Activar el entorno virtual
+                    source .venv/bin/activate
+    
+                    # Actualizar pip dentro del venv (esto NO afecta al sistema)
+                    pip install --upgrade pip
+    
+                    # Instalar Bandit dentro del venv
+                    pip install bandit
+    
+                    # Ejecutar Bandit desde el venv
+                    bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out
+                    '''
+    
                     recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
                 }
             }
-        }
-    }    
-}
+        }    
+    }
