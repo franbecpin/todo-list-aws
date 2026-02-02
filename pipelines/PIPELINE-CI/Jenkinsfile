@@ -27,20 +27,24 @@ pipeline {
         stage('Security') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    sh(script: '''
+                   
+                    sh '''
                     #!/bin/bash
                     set -euxo pipefail
                     
+                    # PATH para los binarios instalados con --user
                     export PATH="$HOME/.local/bin:$PATH"
                     
+                    # Instala bandit para el usuario jenkins
                     python3 -m pip install --user --upgrade pip
                     python3 -m pip install --user --upgrade bandit
                     
-                    # Emitir en formato pylint para que pyLint(...) pueda parsearlo
-                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f pylint -o bandit.out  ''', shell: '/bin/bash')
-                    
-                    // Publica usando el parser de pylint
-                    recordIssues(sourceCodeRetention: 'LAST_BUILD',tools: [pyLint(pattern: 'bandit.out')])
+                    # Ejecuta Bandit y exporta en formato que entiende el parser de Bandit
+                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out
+                    '''
+
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
+
                 }
             }
         }
