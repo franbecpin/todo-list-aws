@@ -57,7 +57,7 @@ pipeline
                     bandit --exit-zero -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out 
                     '''
     
-                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD',  tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')])
                 }
             }
         }    
