@@ -22,7 +22,7 @@ pipeline
                     sh'''
                         export PYTHONPATH="$WORKSPACE/src"
                         flake8 --version
-                        flake8 --format=pylint --exit-zero src > flake8.out
+                        flake8 --format=pylint --exit-zero --verbose src > flake8.out
                     '''
                     recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
                     
