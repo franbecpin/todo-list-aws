@@ -29,10 +29,8 @@ pipeline {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                
                     sh'''
-                        whoami
-                        python3 -m bandit -r
-                        python3 -m bandit --version
-                        python3 -m  bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
+                        sudo  bandit --version
+                        sudo -u ubuntu -H bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
                     '''
                     recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [pyLint(pattern: 'bandit.out')]
                      
