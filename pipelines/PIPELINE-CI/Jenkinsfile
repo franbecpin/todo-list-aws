@@ -1,17 +1,24 @@
-pipeline {
+pipeline 
+{
     agent any
 
-    stages {
-        stage('Get Code') {
-            steps {
+    stages 
+    {
+        stage('Get Code') 
+        {
+            steps 
+            {
                 deleteDir()
                 git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"                
             }
         } 
         
-        stage ('Static Test'){
-            steps{
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+        stage ('Static Test')
+        {
+            steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
+                {
                     sh'''
                         export PYTHONPATH="$WORKSPACE/src"
                         flake8 --version
@@ -24,9 +31,12 @@ pipeline {
             }
         }
         
-        stage('Security') {
-            steps {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+        stage('Security') 
+        {
+            steps 
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
+                {
 
                     sh '''#!/bin/bash
                     set -euxo pipefail
@@ -52,3 +62,4 @@ pipeline {
             }
         }    
     }
+}
