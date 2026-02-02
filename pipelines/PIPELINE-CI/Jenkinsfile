@@ -27,24 +27,16 @@ pipeline {
         stage('Security') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                   
-                    sh '''
-                    #!/bin/bash
+                    sh(script: '''#!/bin/bash
                     set -euxo pipefail
-                    
-                    # PATH para los binarios instalados con --user
                     export PATH="$HOME/.local/bin:$PATH"
-                    
-                    # Instala bandit para el usuario jenkins
+
                     python3 -m pip install --user --upgrade pip
                     python3 -m pip install --user --upgrade bandit
-                    
-                    # Ejecuta Bandit y exporta en formato que entiende el parser de Bandit
-                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out
-                    '''
 
-                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
+                    python3 -m bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out''')
 
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')]
                 }
             }
         }
