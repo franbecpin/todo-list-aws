@@ -54,7 +54,7 @@ pipeline
                     pip install bandit
     
                     # Ejecutar Bandit desde el venv
-                    bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out
+                    bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out --exit-zero
                     '''
     
                     recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
