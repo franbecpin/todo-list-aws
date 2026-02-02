@@ -24,23 +24,24 @@ pipeline {
             }
         }
         
-        stage('Security'){
-            steps{
+        stage('Security') {
+            steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-               
-                    sh'''
-                        export PATH="$HOME/.local/bin:$PATH"
-                        #!/bin/bash
-                        set -euxo pipefail
-                        python3 -m pip install --user --upgrade bandit
-                        export PATH="$HOME/.local/bin:$PATH"
-                        bandit -r .
-                        
-                    '''
-                    recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [pyLint(pattern: 'bandit.out')]
-                     
+                    sh(script: '''
+                    #!/bin/bash
+                    set -euxo pipefail
                     
-                }   
+                    export PATH="$HOME/.local/bin:$PATH"
+                    
+                    python3 -m pip install --user --upgrade pip
+                    python3 -m pip install --user --upgrade bandit
+                    
+                    # Emitir en formato pylint para que pyLint(...) pueda parsearlo
+                    python3 -m bandit -r . -x venv,.venv,tests,build,dist \ -f pylint -o bandit.out  ''', shell: '/bin/bash')
+                    
+                    // Publica usando el parser de pylint
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD',tools: [pyLint(pattern: 'bandit.out')])
+                }
             }
         }
     }
