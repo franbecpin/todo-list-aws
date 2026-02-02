@@ -27,8 +27,10 @@ pipeline {
         stage('Security') {
             steps {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+
                     sh(script: '''#!/bin/bash
                     set -euxo pipefail
+
                     export PATH="$HOME/.local/bin:$PATH"
 
                     python3 -m pip install --user --upgrade pip
@@ -36,9 +38,9 @@ pipeline {
 
                     python3 -m bandit -r . -x venv,.venv,tests,build,dist -f txt -o bandit.out''')
 
-                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')]
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD', tools: [bandit(pattern: 'bandit.out')])
                 }
             }
         }
-    }
+    }    
 }
