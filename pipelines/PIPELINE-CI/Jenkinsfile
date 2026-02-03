@@ -24,7 +24,7 @@ pipeline
                         # Formato pylint (útil si ya usas pyLint(...) en Jenkins)
                         # flake8 --format=pylint --exit-zero --verbose src > flake8.out
                         # flake8 --format=pylint --exit-zero src > flake8.out
-                        flake8 --format=default --exit-zero src > flake8.out
+                        flake8 --format=pylint --exit-zero src>flake8.out
                     '''
                     recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
                     
@@ -56,7 +56,8 @@ pipeline
                     pip install bandit
     
                     # Ejecutar Bandit desde el venv
-                    bandit --exit-zero -r src -vv -x venv,.venv,tests,build,dist -f txt -o bandit.out
+                    # bandit --exit-zero -r src -vv -x venv,.venv,tests,build,dist -f txt -o bandit.out
+                    bandit --exit-zero -r src . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}" 
                     '''
     
                     recordIssues(sourceCodeRetention: 'LAST_BUILD',  tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')])
