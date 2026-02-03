@@ -24,7 +24,8 @@ pipeline
                         # Formato pylint (útil si ya usas pyLint(...) en Jenkins)
                         # flake8 --format=pylint --exit-zero --verbose src > flake8.out
                         # flake8 --format=pylint --exit-zero src > flake8.out
-                        flake8 --format=pylint --exit-zero src>flake8.out
+                        # flake8 --format=pylint --exit-zero src>flake8.out
+                        flake8 --format=pylint --exit-zero --verbose src > flake8.out 2>&1
                     '''
                     recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
                     
