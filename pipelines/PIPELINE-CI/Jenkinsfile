@@ -84,12 +84,13 @@ pipeline
          steps
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
-                sh'''
-                    def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
-                        returnStdout: true)
-                    echo "$BASE_URL"
-                    # pytest todoApiTest.py -v --junitxml=pytest.xml
-                '''    
+                {
+                    sh'''
+                        def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
+                            returnStdout: true)
+                        echo "$BASE_URL"
+                        # pytest todoApiTest.py -v --junitxml=pytest.xml
+                    '''    
                 }
             }    
         }
