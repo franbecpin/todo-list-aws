@@ -176,9 +176,8 @@ class TestApi(unittest.TestCase):
         response = requests.post(url, data=json.dumps(data))
         json_response = response.json()
         print('Response Add todo: ' + json_response['body'])
-        # jsonbody= json.loads(json_response['body'])
-        jsonbody = parse_body(response)
-        
+        #jsonbody= json.loads(json_response['body'])
+        jsonbody = response.json()
         ID_TODO = jsonbody['id']
         print ('ID todo:'+ID_TODO)
         self.assertEqual(
