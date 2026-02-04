@@ -90,6 +90,7 @@ pipeline
                             returnStdout: true)
                         echo "$BASE_URL"
                         echo 'Initiating Integration Tests'
+                        sh "pytest todoApiTest.py -v --junitxml=pytest.xml"
                     }
                 }
             }    
