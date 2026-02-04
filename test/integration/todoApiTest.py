@@ -61,7 +61,8 @@ class TestApi(unittest.TestCase):
         # print('Response Add Todo: '+ json_response['body'])
         print("Response Add todo:", json_response)
         
-        jsonbody= json.loads(json_response['body'])
+        #jsonbody= json.loads(json_response['body'])
+        jsonbody= json.loads(json_response)
         ID_TODO = jsonbody['id']
         print ('ID todo:'+ID_TODO)
         self.assertEqual(
