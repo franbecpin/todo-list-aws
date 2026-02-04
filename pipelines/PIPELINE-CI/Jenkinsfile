@@ -90,7 +90,12 @@ pipeline
                             returnStdout: true)
                         echo "$BASE_URL"
                         echo 'Initiating Integration Tests'
-                        sh "pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml"
+                        
+                        // Ejecutar pytest con BASE_URL exportada al entorno
+                        withEnv(["BASE_URL=${BASE_URL}"]) {
+                            sh "pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml"
+                        }
+
                     }
                 }
             }    
