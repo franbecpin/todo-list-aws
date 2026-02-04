@@ -65,9 +65,9 @@ pipeline
         
         stage('Deploy”)
         {
-            steps 
+            steps
             {
-                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     sam build
                     sam validate --region us-east-1 
