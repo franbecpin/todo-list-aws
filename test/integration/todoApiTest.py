@@ -173,13 +173,11 @@ class TestApi(unittest.TestCase):
         data = {
          "text": "Integration text example - Initial"
         }
-        #response = requests.post(url, data=json.dumps(data))
-        response = requests.post(url, json=data)
+        response = requests.post(url, data=json.dumps(data))
         json_response = response.json()
-        #print('Response Add todo: ' + json_response['body'])
-        #jsonbody= json.loads(json_response['body'])
-        print('Response Add todo: ' + str(json_response))
-        jsonbody = json_response
+        # print('Response Add todo: ' + json_response['body'])
+        print("Response Add todo:", json_response)
+        jsonbody= json.loads(json_response['body'])
         ID_TODO = jsonbody['id']
         print ('ID todo:'+ID_TODO)
         self.assertEqual(
