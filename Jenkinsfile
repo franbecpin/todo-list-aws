@@ -39,19 +39,19 @@ pipeline
                 {
 
                     sh '''#!/bin/bash
-                    set -euxo pipefail
+                    # set -euxo pipefail
     
                     # Crear entorno virtual aislado en el workspace
-                    python3 -m venv .venv
+                    # python3 -m venv .venv
     
                     # Activar el entorno virtual
-                    source .venv/bin/activate
+                    # source .venv/bin/activate
     
                     # Actualizar pip dentro del venv (esto NO afecta al sistema)
-                    pip install --upgrade pip
+                    # pip install --upgrade pip
     
                     # Instalar Bandit dentro del venv
-                    pip install bandit
+                    #pip install bandit
     
                     # Ejecutar Bandit desde el venv
                     bandit --exit-zero -r --verbose src . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}" 
