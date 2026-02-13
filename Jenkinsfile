@@ -95,7 +95,7 @@ pipeline
                         }
 
                     }
-                    junit allowEmptyResults: true, testResults: 'pytest.xml'
+                    junit  'pytest.xml'
                     
                 }
             }    
@@ -107,11 +107,10 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
-                    when {
-                        expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
-                    }
-                    steps {
-                        echo 'Stage 2 ejecutándose (Stage 1 fue exitoso)'
+                    onlyIfSuccess {
+                        sh'''
+                            echo GIT MERGE
+                        '''
                     }
                     
                 }
