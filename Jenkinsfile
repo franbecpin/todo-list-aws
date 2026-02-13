@@ -34,14 +34,23 @@ pipeline
         stage('Security'){
             steps{
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    sh'''
+                    sh '''#!/bin/bash
                         set -euxo pipefail
-                        python3 -m venv venv
-                        source venv/bin/activate
+        
+                        # Crear entorno virtual aislado en el workspace
+                        python3 -m venv .venv
+        
+                        # Activar el entorno virtual
+                        source .venv/bin/activate
+        
+                        # Actualizar pip dentro del venv (esto NO afecta al sistema)
                         pip install --upgrade pip
+        
+                        # Instalar Bandit dentro del venv
                         pip install bandit
-
-                        venv/bin/bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
+        
+                        # Ejecutar Bandit desde el venv
+                        bandit --exit-zero -r --verbose src . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}" 
                     '''
                     
 
