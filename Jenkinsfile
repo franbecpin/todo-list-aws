@@ -84,13 +84,13 @@ pipeline
                         def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
                             returnStdout: true)
                         echo "$BASE_URL"
-                        echo 'Initiating Integration Tests'
+                        echo 'Initiating Rest Tests'
                         
                         // Ejecutar pytest con BASE_URL exportada al entorno
                         withEnv(["BASE_URL=${BASE_URL}"]) {
                             sh '''
                                 set PYTHONPATH=%WORKSPACE%
-                                # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                             '''
                         }
 
@@ -107,20 +107,22 @@ pipeline
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     
-                    
                     script {
-                        def soFar = (currentBuild.currentResult ?: 'SUCCESS')
-                        if (soFar != 'SUCCESS') {
-                            error "Parando: estado acumulado = ${soFar}"
+                        def resultadoStages = (currentBuild.currentResult ?: 'SUCCESS')
+                        if (resultadoStages != 'SUCCESS') {
+                            error "Resultado Stage pipeline: ${soFar}"
+                            echo 'Se descarta MERGE a PRODUCCION'                            
                         }
                         else{
-                            echo 'GIT MERGE'
+                            echo "Resultado Stage pipeline: ${soFar}"
+                            echo 'Preparando GIT MERGE a PRODUCCION'
+                            git checkout main
+                            git merge develop -m "merge branch develop"
+                            git log --merges -1
+                            
                         }    
                     }
-                    
-                    
 
-                    
                 }
             }
         }    
