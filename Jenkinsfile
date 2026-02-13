@@ -52,7 +52,7 @@ pipeline
                         # Ejecutar Bandit desde el venv
                         bandit --exit-zero -r --verbose src . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}" 
                     '''
-                    
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD',  tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')])
 
                 }   
             }
