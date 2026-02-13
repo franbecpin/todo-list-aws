@@ -57,6 +57,24 @@ pipeline
                 }   
             }
         }
+        
+        
+         stage('Deploy')
+        {
+            steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    sh '''
+                        sam build
+                        sam validate --region us-east-1 
+                        # sam deploy --guided
+                        sam deploy --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                    '''
+                }
+            }
+        }
+        
     }
 }
 
