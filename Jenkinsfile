@@ -92,6 +92,7 @@ pipeline
                                 set PYTHONPATH=%WORKSPACE%
                                 pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                             '''
+                            junit 'pytest.xml.xml'
                         }
 
                     }
