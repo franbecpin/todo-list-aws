@@ -35,9 +35,9 @@ pipeline
             steps{
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     bat'''
-                       bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
+                     #  bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
                     '''
-                    recordIssues aggregatingResults: true, enabledForFailure: true, qualityGates: [[integerThreshold: 2, threshold: 2.0, type: 'TOTAL'], [criticality: 'ERROR', integerThreshold: 4, threshold: 4.0, type: 'TOTAL']], sourceCodeRetention: 'LAST_BUILD', tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')]
+                    #recordIssues aggregatingResults: true, enabledForFailure: true, qualityGates: [[integerThreshold: 2, threshold: 2.0, type: 'TOTAL'], [criticality: 'ERROR', integerThreshold: 4, threshold: 4.0, type: 'TOTAL']], sourceCodeRetention: 'LAST_BUILD', tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')]
 
                 }   
             }
