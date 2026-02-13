@@ -107,11 +107,14 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
-                    onlyIfSuccess {
-                        sh'''
-                            echo GIT MERGE
-                        '''
+                    
+                    def soFar = (currentBuild.currentResult ?: 'SUCCESS')
+                        if (soFar != 'SUCCESS') {
+                            error "Parando: el estado acumulado es ${soFar}"
+                        }
+                        echo "Ejecutando C"
                     }
+
                     
                 }
             }
