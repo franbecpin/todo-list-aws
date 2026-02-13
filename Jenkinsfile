@@ -75,6 +75,27 @@ pipeline
             }
         }
         
+        stage('Rest Test'){
+         steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    script {
+                        def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
+                            returnStdout: true)
+                        echo "$BASE_URL"
+                        echo 'Initiating Integration Tests'
+                        
+                        // Ejecutar pytest con BASE_URL exportada al entorno
+                        withEnv(["BASE_URL=${BASE_URL}"]) {
+                            sh "pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml"
+                        }
+
+                    }
+                }
+            }    
+        }
+        
     }
 }
 
