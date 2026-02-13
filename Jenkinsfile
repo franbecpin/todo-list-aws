@@ -34,7 +34,7 @@ pipeline
         stage('Security'){
             steps{
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
-                    bat'''
+                    sh'''
                      #  bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
                     '''
                     
