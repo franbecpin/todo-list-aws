@@ -119,7 +119,13 @@ pipeline
                             echo 'Preparando GIT MERGE a PRODUCCION'
                             sh'''
                                 git status
-                            '''    
+                                
+                            ''' 
+                             // Ejemplo para usuario y contraseña
+                            withCredentials([usernamePassword(credentialsId: 'githubcredencials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                sh 'echo "Usuario: $USER"'
+                                sh 'echo "Contraseña: $PASS"' // Jenkins enmascara automáticamente el valor en los logs
+                            }
                             
                         }    
                     }
