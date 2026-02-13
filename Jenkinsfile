@@ -125,6 +125,12 @@ pipeline
                             withCredentials([usernamePassword(credentialsId: 'githubcredencials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
                                 sh 'echo "Usuario: $USER"'
                                 sh 'echo "Contraseña: $PASS"' // Jenkins enmascara automáticamente el valor en los logs
+                                sh'''
+                                    git checkout main
+                                    git merge develop -m "merge branch develop"
+								    git push https:// $USER:$PASS@github.com/franbecpin/todo-list-aws.git main								
+                                    git log --merges -1
+                                '''
                             }
                             
                         }    
