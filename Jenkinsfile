@@ -107,9 +107,12 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
-                    sh'''
-                        echo Merge en GitHub
-                    '''    
+                    when {
+                        expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+                    }
+                    steps {
+                        echo 'Stage 2 ejecutándose (Stage 1 fue exitoso)'
+                    }
                     
                 }
             }
