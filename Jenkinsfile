@@ -35,7 +35,7 @@ pipeline
             steps{
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh'''
-                     #  bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
+                        bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
                     '''
                     
 
