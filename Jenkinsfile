@@ -112,7 +112,9 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
-                    echo Merge en GitHub
+                    sh'''
+                        echo Merge en GitHub
+                    '''    
                     
                 }
             }
