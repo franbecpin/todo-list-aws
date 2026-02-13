@@ -88,7 +88,10 @@ pipeline
                         
                         // Ejecutar pytest con BASE_URL exportada al entorno
                         withEnv(["BASE_URL=${BASE_URL}"]) {
-                            sh "pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml"
+                            sh '''
+                                set PYTHONPATH=%WORKSPACE%
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                            '''
                         }
 
                     }
