@@ -116,11 +116,7 @@ pipeline
                         else{
                             echo "Resultado Stage pipeline: ${soFar}"
                             echo 'Preparando GIT MERGE a PRODUCCION'
-                            sh'''
-                                git checkout main
-                                git merge develop -m "merge branch develop"
-                                git log --merges -1
-                            '''    
+                            
                             
                         }    
                     }
