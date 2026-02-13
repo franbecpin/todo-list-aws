@@ -95,7 +95,6 @@ pipeline
                         }
 
                     }
-                    junit  'pytest.xml'
                     
                 }
             }    
@@ -113,7 +112,7 @@ pipeline
                             error "Parando: el estado acumulado es ${soFar}"
                         }
                         echo "Ejecutando C"
-                    }
+    
 
                     
                 }
