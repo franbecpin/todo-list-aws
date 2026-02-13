@@ -95,13 +95,8 @@ pipeline
                         }
 
                     }
+                    junit allowEmptyResults: true, testResults: 'pytest.xml'
                     
-                    post {
-                        always {
-                            // Publicar resultados de JUnit
-                            junit 'pytest.xml'
-                        }
-                    }
                 }
             }    
         }
