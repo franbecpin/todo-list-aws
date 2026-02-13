@@ -110,13 +110,17 @@ pipeline
                     script {
                         def resultadoStages = (currentBuild.currentResult ?: 'SUCCESS')
                         if (resultadoStages != 'SUCCESS') {
-                            error "Resultado Stage pipeline: ${soFar}"
+                            error "Resultado Stage pipeline: ${resultadoStages}"
                             echo 'Se descarta MERGE a PRODUCCION'                            
                         }
                         else{
                             echo "Resultado Stage pipeline: ${soFar}"
                             echo 'Preparando GIT MERGE a PRODUCCION'
-                            
+                            sh'''
+                                git checkout main
+                                git merge develop -m "merge branch develop"
+                                git log --merges -1
+                            '''    
                             
                         }    
                     }
