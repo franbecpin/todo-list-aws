@@ -92,13 +92,31 @@ pipeline
                                 set PYTHONPATH=%WORKSPACE%
                                 pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                             '''
-                            junit 'pytest.xml.xml'
                         }
 
+                    }
+                    
+                    post {
+                        always {
+                            // Publicar resultados de JUnit
+                            junit 'pytest.xml'
+                        }
                     }
                 }
             }    
         }
+        
+        
+         stage('Promote'){
+         steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    echo Merge en GitHub
+                    
+                }
+            }
+        }    
         
     }
 }
