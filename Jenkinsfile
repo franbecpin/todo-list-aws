@@ -128,7 +128,7 @@ pipeline
                                 sh'''
                                     git checkout main
                                     git merge develop -m "merge branch develop"
-                                    git commit -m "merge branch develop"
+                                    git commit --allow-empty -m "merge branch develop"
 								    git push https://$USER:$PASS@github.com/franbecpin/todo-list-aws.git main								
                                     git log --merges -1
                                 '''
