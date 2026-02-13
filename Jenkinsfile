@@ -36,12 +36,8 @@ pipeline
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
                     sh'''
                         
-                        python3 -m venv venv
-                        source venv/bin/activate
-                        pip install --upgrade pip
-                        pip install bandit
 
-                        venv/bin/bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
+                        bandit --exit-zero -r . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}"                        
                     '''
                     
 
