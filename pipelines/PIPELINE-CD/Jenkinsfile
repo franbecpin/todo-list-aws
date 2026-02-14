@@ -25,7 +25,7 @@ pipeline
                         sam validate --region us-east-1 
                         # sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
                         
-                        sam deploy --stack-name Produccion-todo-list-aws-fbp --region us-east-1 --capabilities CAPABILITY_IAM --resolve-s3  --no-confirm-changeset --no-fail-on-empty-changeset
+                        sam deploy --stack-name Produccion --region us-east-1 --capabilities CAPABILITY_IAM --resolve-s3  --no-confirm-changeset --no-fail-on-empty-changeset
 
 
                     '''
