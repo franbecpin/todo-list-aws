@@ -90,7 +90,7 @@ pipeline
                         withEnv(["BASE_URL=${BASE_URL}"]) {
                             sh '''
                                 set PYTHONPATH=%WORKSPACE%
-                                # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                             '''
                         }
 
