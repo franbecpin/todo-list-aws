@@ -42,3 +42,11 @@ capabilities = "CAPABILITY_IAM"
 parameter_overrides = "Stage=\"production\""
 image_repositories = []
 resolve_s3 = true
+
+[prod.deploy.parameters]
+stack_name = "produccion"
+region = "us-east-1"
+capabilities = "CAPABILITY_IAM" # o CAPABILITY_NAMED_IAM si fijas RoleName
+parameter_overrides = "Stage=\"prod\""
+resolve_s3 = true
+confirm_changeset = false
