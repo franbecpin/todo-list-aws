@@ -129,9 +129,10 @@ pipeline
                                     git checkout main
                                     git pull origin main
                                     git merge develop -m "merge branch develop"
+                                    git log --merges -1
                                     git commit --allow-empty -m "merge branch develop commit"
 								    git push https://$USER:$PASS@github.com/franbecpin/todo-list-aws.git main								
-                                    git log --merges -1
+                                   
                                 '''
                             }
                             
