@@ -23,7 +23,11 @@ pipeline
                     sh '''
                         sam build
                         sam validate --region us-east-1 
-                        sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        # sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        
+                        sam deploy --stack-name Produccion --region us-east-1 --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+
+
                     '''
                 }
             }
