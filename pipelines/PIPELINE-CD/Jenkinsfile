@@ -27,7 +27,9 @@ pipeline
                         
                         # usa el entorno 'production' definido en samconfig
                         # sam deploy --config-file samconfig.toml --config-env production  --no-confirm-changeset --no-fail-on-empty-changeset
-                        sam deploy --stack-name todo-list-aws-production --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        # sam deploy --stack-name todo-list-aws-production --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        sam deploy --config-file samconfig.toml --config-env production --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
+                        
                         '''
                 }
             }
