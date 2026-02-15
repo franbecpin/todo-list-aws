@@ -48,7 +48,8 @@ pipeline
                                 set -x
                                 set PYTHONPATH=%WORKSPACE%
                                 # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
-                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml -m "not destructive"
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml -m 'not destructive'
+                                
                             '''
                         }
 
