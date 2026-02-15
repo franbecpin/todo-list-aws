@@ -49,7 +49,8 @@ pipeline
                                 export PYTHONPATH="$WORKSPACE"
                                 # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                                 # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml -m 'not destructive'
-                                pytest test/integration/todoApiTest.py --co -q --junitxml=pytest.xml -m
+                                # pytest test/integration/todoApiTest.py --co -q --junitxml=pytest.xml -m
+                                pytest test/integration/todoApiTest.py -v -k "not addtodo and not updatetodo and not deletetodo and not listtodos"
                                 
                             '''
                         }
