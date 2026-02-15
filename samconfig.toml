@@ -42,3 +42,17 @@ capabilities = "CAPABILITY_IAM"
 parameter_overrides = "Stage=\"production\""
 image_repositories = []
 resolve_s3 = true
+
+default.global.parameters]
+region = "us-east-1"
+[production]
+[production.deploy]
+[production.deploy.parameters]
+stack_name = "staging-todo-list-aws-production"
+#s3_bucket = "aws-sam-cli-managed-staging-samclisourcebucket-upt09go84tay"
+#s3_prefix = "staging-todo-list-aws"
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Stage=\"production\""
+image_repositories = []
+resolve_s3 = true
+confirm_changeset = true
