@@ -47,6 +47,6 @@ resolve_s3 = true
 stack_name = "produccion"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM" # o CAPABILITY_NAMED_IAM si fijas RoleName
-parameter_overrides = "Stage=\"prod\""
+parameter_overrides = "Stage=\"produccion\""
 resolve_s3 = true
 confirm_changeset = false

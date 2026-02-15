@@ -32,7 +32,7 @@ pipeline
                         
                         # Crear la nueva pila usando la entrada de producción del samconfig.toml
                         aws cloudformation wait stack-delete-complete --stack-name production --region us-east-1
-                        sam deploy --config-file samconfig.toml --config-env prod --resolve-s3 --debug
+                        sam deploy --config-file samconfig.toml --config-env produccion --resolve-s3 --debug
 
 
                     '''
