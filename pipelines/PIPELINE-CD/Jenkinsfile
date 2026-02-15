@@ -31,7 +31,7 @@ pipeline
                         # sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
                         
                         # Crear la nueva pila usando la entrada de producción del samconfig.toml
-                        # aws cloudformation wait stack-delete-complete --stack-name production --region us-east-1
+                        aws cloudformation wait stack-delete-complete --stack-name production --region us-east-1
                         sam deploy --config-file samconfig.toml --config-env production --resolve-s3 --no-fail-on-empty-changeset --debug
                         
 
