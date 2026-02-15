@@ -23,11 +23,7 @@ pipeline
                     sh '''
                         sam build
                         sam validate --region us-east-1 
-                        # sam deploy --stack-name todo-list-aws-production --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
-                        
-                        # usa el entorno 'production' definido en samconfig
-                        # sam deploy --config-file samconfig.toml --config-env production  --no-confirm-changeset --no-fail-on-empty-changeset
-                        # sam deploy --stack-name todo-list-aws-production --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        # desplegando segun la configuracion para production de samconfig.toml
                         sam deploy --config-file samconfig.toml --config-env production --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
                         
                         '''
@@ -41,7 +37,7 @@ pipeline
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     script {
-                        def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
+                        def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws-production --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
                             returnStdout: true)
                         echo "$BASE_URL"
                         echo 'Initiating Rest Tests'
@@ -49,6 +45,7 @@ pipeline
                         // Ejecutar pytest con BASE_URL exportada al entorno
                         withEnv(["BASE_URL=${BASE_URL}"]) {
                             sh '''
+                                set -x
                                 set PYTHONPATH=%WORKSPACE%
                                 # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
                                 pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml -m "not destructive"
