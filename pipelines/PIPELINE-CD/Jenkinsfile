@@ -27,8 +27,8 @@ pipeline
                         # sam deploy --stack-name produccion --region us-east-1 --capabilities CAPABILITY_IAM --resolve-s3  --no-confirm-changeset --no-fail-on-empty-changeset
                         
                         # Eliminar la pila de develop para liberar los recursos y generar la nueva pila
-                        aws cloudformation wait stack-delete-complete --stack-name todo-list-aws-production --region us-east-1
-                        sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
+                        # aws cloudformation wait stack-delete-complete --stack-name todo-list-aws-production --region us-east-1
+                        # sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
                         
                         # Crear la nueva pila usando la entrada de producción del samconfig.toml
                         sam deploy --config-file samconfig.toml --config-env prod --resolve-s3 --debug
@@ -54,7 +54,8 @@ pipeline
                         withEnv(["BASE_URL=${BASE_URL}"]) {
                             sh '''
                                 set PYTHONPATH=%WORKSPACE%
-                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                                # pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml -m "not destructive"
                             '''
                         }
 
