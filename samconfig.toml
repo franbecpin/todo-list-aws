@@ -42,3 +42,7 @@ capabilities = "CAPABILITY_IAM"
 parameter_overrides = "Stage=\"production\""
 image_repositories = []
 resolve_s3 = true
+
+
+[production.deploy.parameters]
+stack_name = "todo-list-aws-production"
