@@ -34,22 +34,13 @@ region = "us-east-1"
 [production]
 [production.deploy]
 [production.deploy.parameters]
-stack_name = "todo-list-aws-production"
+stack_name = "production"
 # s3_bucket = "aws-sam-cli-managed-production-samclisourcebucket-upt09go84tay"
 # s3_prefix = "todo-list-aws"
 region = "us-east-1"
 capabilities = "CAPABILITY_IAM"
-parameter_overrides = "Stage=\"develop\""
+parameter_overrides = "Stage=\"production\""
 image_repositories = []
 resolve_s3 = true
-
-[produccion.deploy.parameters]
-stack_name = "produccion"
-region = "us-east-1"
-capabilities = "CAPABILITY_IAM" # o CAPABILITY_NAMED_IAM si fijas RoleName
-parameter_overrides = "Stage=\"produccion\""
-resolve_s3 = true
-confirm_changeset = false
-
 
 

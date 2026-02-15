@@ -31,7 +31,7 @@ pipeline
                         # sam deploy -stack-name Produccion --config-file samconfig.toml --no-confirm-changeset --no-fail-on-empty-changeset
                         
                         # Crear la nueva pila usando la entrada de producción del samconfig.toml
-                        sam deploy --config-file samconfig.toml --config-env produccion --resolve-s3 --debug
+                        sam deploy --config-file samconfig.toml --config-env production --resolve-s3 --debug
 
 
                     '''

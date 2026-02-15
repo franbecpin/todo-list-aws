@@ -13,7 +13,7 @@ Parameters:
     AllowedValues:
       - default
       - staging
-      - produccion
+      - production
     Description: Enter staging or production. Default is default  
 
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
