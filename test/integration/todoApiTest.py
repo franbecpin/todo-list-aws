@@ -75,7 +75,7 @@ class TestApi(unittest.TestCase):
         )
         print('End - integration test Add TODO')
     
-   def test_api_gettodo(self):
+    def test_api_gettodo(self):
         print('---------------------------------------')
         print('Starting - integration test Get TODO (adaptativo)')
 
