@@ -12,7 +12,8 @@ pipeline
             steps 
             {
                 deleteDir()
-                git branch: "main", url: "https://github.com/franbecpin/todo-list-aws.git"                 
+                git branch: "main", url: "https://github.com/franbecpin/todo-list-aws.git"       
+                stash name:'code', includes:'**' 
             }
         } 
         
@@ -24,6 +25,7 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
+                    unstash name:'code'
                     sh '''
                         sam build
                         sam validate --region us-east-1 
@@ -42,6 +44,7 @@ pipeline
                
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
+                    unstash name:'code'
                     script {
                         def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws-production --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
                             returnStdout: true)
