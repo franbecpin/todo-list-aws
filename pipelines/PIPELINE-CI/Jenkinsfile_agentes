@@ -11,7 +11,8 @@ pipeline
             steps 
             {
                 deleteDir()
-                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"                
+                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"   
+				stash name:'code', includes:'**' 
             }
         } 
         
@@ -26,8 +27,9 @@ pipeline
                     {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
                         {
+							unstash name:'code'
                             sh'''
-                                echo Service en Nodo: %NODE_NAME% - Workspace: %WORKSPACE%'  
+                                echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE"  
                                 export PYTHONPATH="$WORKSPACE/src"
                                 # Formato pylint (útil si ya usas pyLint(...) en Jenkins)
                                 flake8 --format=pylint --exit-zero --verbose src > flake8.out 2>&1
@@ -43,8 +45,9 @@ pipeline
                     agent { label 'estaticos'}
                     steps{
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+							unstash name:'code'
                             sh '''
-                                echo Service en Nodo: %NODE_NAME% - Workspace: %WORKSPACE%'  
+                               echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE"'  
                             '''    
                             sh '''#!/bin/bash
                                 set -euxo pipefail
@@ -78,8 +81,9 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
+					unstash name:'code'
                     sh '''
-                        echo Service en Nodo: %NODE_NAME% - Workspace: %WORKSPACE%'  
+                        echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE" 
                         sam build
                         sam validate --region us-east-1 
                         # sam deploy --guided
@@ -95,11 +99,12 @@ pipeline
                 agent { label 'apiRest'}
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
+					unstash name:'code'
                     script {
                         def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
                             returnStdout: true)
                         echo "$BASE_URL"
-                        echo Service en Nodo: %NODE_NAME% - Workspace: %WORKSPACE%'  
+                        echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE"  
                         echo 'Initiating Rest Tests'
                         
                         // Ejecutar pytest con BASE_URL exportada al entorno
@@ -122,7 +127,7 @@ pipeline
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
-                    
+                    unstash name:'code'
                     script {
                         def resultadoStages = (currentBuild.currentResult ?: 'SUCCESS')
                         if (resultadoStages != 'SUCCESS') {
@@ -161,4 +166,6 @@ pipeline
         
     }
 }
+
+
 
