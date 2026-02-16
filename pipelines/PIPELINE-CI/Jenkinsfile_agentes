@@ -47,7 +47,7 @@ pipeline
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
 							unstash name:'code'
                             sh '''
-                               echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE"'  
+                               echo "Service en Nodo: $NODE_NAME - Workspace: $WORKSPACE" 
                             '''    
                             sh '''#!/bin/bash
                                 set -euxo pipefail
