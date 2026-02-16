@@ -12,7 +12,7 @@ pipeline
             steps 
             {
                 deleteDir()
-                git branch: "main", url: "https://github.com/franbecpin/todo-list-aws.git"                
+                git branch: "main", url: "https://github.com/franbecpin/todo-list-aws.git"                 
             }
         } 
         
