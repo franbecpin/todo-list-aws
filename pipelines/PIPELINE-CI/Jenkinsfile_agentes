@@ -94,9 +94,10 @@ pipeline
         }
         
         stage('Rest Test'){
-         steps
+            agent { label 'agent-apiRest'}
+            steps
             {
-                agent { label 'agent-apiRest'}
+                
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
 					unstash name:'code'
