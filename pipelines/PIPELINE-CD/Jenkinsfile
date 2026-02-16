@@ -18,7 +18,6 @@ pipeline
        
         stage('Deploy')
         {
-            agent { label 'agent-estaticos'}
             steps
             {
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
@@ -37,7 +36,6 @@ pipeline
         stage('Rest Test'){
          steps
             {
-                agent { label 'agent-apiRest'}
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     script {
