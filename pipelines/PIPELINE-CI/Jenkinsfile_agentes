@@ -22,7 +22,7 @@ pipeline
         
                 stage ('Static Test')
                 {
-                    agent { label 'estaticos'}
+                    agent { label 'agent-estaticos'}
                     steps
                     {
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
@@ -42,7 +42,7 @@ pipeline
                 }
                 
                 stage('Security'){
-                    agent { label 'estaticos'}
+                    agent { label 'agent-estaticos'}
                     steps{
                         catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
 							unstash name:'code'
@@ -96,7 +96,7 @@ pipeline
         stage('Rest Test'){
          steps
             {
-                agent { label 'apiRest'}
+                agent { label 'agent-apiRest'}
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
 					unstash name:'code'
