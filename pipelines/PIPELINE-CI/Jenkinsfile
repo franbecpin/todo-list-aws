@@ -9,7 +9,10 @@ pipeline
             steps 
             {
                 deleteDir()
-                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"                
+                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"     
+                sh'''
+                    curl -L -o samconfig.toml https://raw.githubusercontent.com/franbecpin/todo-list-aws-config/staging/samconfig.toml || echo "ERROR EN CURL"
+                '''    
             }
         } 
         
