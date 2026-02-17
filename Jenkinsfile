@@ -1,0 +1,155 @@
+pipeline 
+{
+    agent any
+
+    stages 
+    {
+        stage('Get Code') 
+        {
+            steps 
+            {
+                deleteDir()
+                git branch: "develop", url: "https://github.com/franbecpin/todo-list-aws.git"     
+                sh'''
+                    curl -L -o samconfig.toml https://raw.githubusercontent.com/franbecpin/todo-list-aws-config/staging/samconfig.toml || echo "ERROR EN CURL"
+                '''    
+            }
+        } 
+        
+        stage ('Static Test')
+        {
+            steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') 
+                {
+                    sh'''
+                        export PYTHONPATH="$WORKSPACE/src"
+                        # Formato pylint (útil si ya usas pyLint(...) en Jenkins)
+                        flake8 --format=pylint --exit-zero --verbose src > flake8.out 2>&1
+                    '''
+                    recordIssues sourceCodeRetention: 'LAST_BUILD', tools: [flake8(pattern: 'flake8.out')]
+                    
+
+                }
+            }
+        }
+        
+        stage('Security'){
+            steps{
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                    sh '''#!/bin/bash
+                        set -euxo pipefail
+        
+                        # Crear entorno virtual aislado en el workspace
+                        python3 -m venv .venv
+        
+                        # Activar el entorno virtual
+                        source .venv/bin/activate
+        
+                        # Actualizar pip dentro del venv (esto NO afecta al sistema)
+                        pip install --upgrade pip
+        
+                        # Instalar Bandit dentro del venv
+                        pip install bandit
+        
+                        # Ejecutar Bandit desde el venv
+                        bandit --exit-zero -r --verbose src . -f custom -o bandit.out --msg-template "{abspath}:{line}: [{test_id}] {msg}" 
+                    '''
+                    recordIssues(sourceCodeRetention: 'LAST_BUILD',  tools: [pyLint(name: 'Bandit', pattern: 'bandit.out')])
+
+                }   
+            }
+        }
+        
+        
+         stage('Deploy')
+        {
+            steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    sh '''
+                        # aws cloudformation delete-stack --stack-name staging-todo-list-aws --region us-east-1
+                        # aws cloudformation wait stack-delete-complete --stack-name staging-todo-list-aws --region us-east-1
+                    
+                        sam build
+                        sam validate --region us-east-1 
+                        # sam deploy --guided
+                        sam deploy --config-file "$WORKSPACE/samconfig.toml" --config-env staging --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
+                        
+                    '''
+                }
+            }
+        }
+        
+        stage('Rest Test'){
+         steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    script {
+                        def BASE_URL = sh( script: "aws cloudformation describe-stacks --stack-name todo-list-aws --query 'Stacks[0].Outputs[?OutputKey==`BaseUrlApi`].OutputValue' --region us-east-1 --output text",
+                            returnStdout: true)
+                        echo "$BASE_URL"
+                        echo 'Initiating Rest Tests'
+                        
+                        // Ejecutar pytest con BASE_URL exportada al entorno
+                        withEnv(["BASE_URL=${BASE_URL}"]) {
+                            sh '''
+                                export PYTHONPATH="$WORKSPACE"
+                                pytest test/integration/todoApiTest.py -v --junitxml=pytest.xml
+                            '''
+                        }
+
+                    }
+                    
+                }
+            }    
+        }
+        
+        
+         stage('Promote'){
+         steps
+            {
+                catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
+                {
+                    
+                    script {
+                        def resultadoStages = (currentBuild.currentResult ?: 'SUCCESS')
+                        if (resultadoStages != 'SUCCESS') {
+                            echo "Resultado Stage pipeline: ${resultadoStages}"
+                            echo 'Se descarta MERGE a PRODUCCION'
+                            error("Abortando promote: el pipeline no está en SUCCESS")
+                        }
+                        else{
+                            echo "Resultado Stage pipeline: ${resultadoStages}"
+                            echo 'Preparando GIT MERGE a PRODUCCION'
+                            sh'''
+                                git status
+                                
+                            ''' 
+                             // Ejemplo para usuario y contraseña
+                            withCredentials([usernamePassword(credentialsId: 'githubcredencials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                                sh 'echo "Usuario: $USER"'
+                                sh 'echo "Contraseña: $PASS"' // Jenkins enmascara automáticamente el valor en los logs
+                                sh'''
+                                    git checkout main
+                                    git pull origin main
+                                    git merge develop -m "merge branch develop"
+                                    git log --merges -1
+								    git push https://$USER:$PASS@github.com/franbecpin/todo-list-aws.git main								
+                                   
+                                '''
+                            }
+                            
+                        }    
+                    }
+
+                }
+            }
+            
+        }    
+        
+    }
+}
+
