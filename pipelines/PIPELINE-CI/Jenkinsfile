@@ -69,13 +69,14 @@ pipeline
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     sh '''
-                        aws cloudformation delete-stack --stack-name staging-todo-list-aws --region us-east-1
-                        aws cloudformation wait stack-delete-complete --stack-name staging-todo-list-aws --region us-east-1
+                        # aws cloudformation delete-stack --stack-name staging-todo-list-aws --region us-east-1
+                        # aws cloudformation wait stack-delete-complete --stack-name staging-todo-list-aws --region us-east-1
                     
                         sam build
                         sam validate --region us-east-1 
                         # sam deploy --guided
-                        sam deploy --config-file "$WORKSPACE/samconfig.toml" --config-env staging --no-confirm-changeset --no-fail-on-empty-changeset
+                        sam deploy --config-file "$WORKSPACE/samconfig.toml" --config-env staging --resolve-s3 --no-confirm-changeset --no-fail-on-empty-changeset
+                        
                     '''
                 }
             }
