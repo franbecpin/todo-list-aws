@@ -69,6 +69,9 @@ pipeline
                 catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE')
                 {
                     sh '''
+                        aws cloudformation delete-stack --stack-name staging-todo-list-aws --region us-east-1
+                        aws cloudformation wait stack-delete-complete --stack-name staging-todo-list-aws --region us-east-1
+                    
                         sam build
                         sam validate --region us-east-1 
                         # sam deploy --guided
