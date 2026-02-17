@@ -72,7 +72,7 @@ pipeline
                         sam build
                         sam validate --region us-east-1 
                         # sam deploy --guided
-                        sam deploy --config-file "$WORKSPACE/samconfig.toml" --no-confirm-changeset --no-fail-on-empty-changeset
+                        sam deploy --config-file "$WORKSPACE/samconfig.toml" --config-env staging --no-confirm-changeset --no-fail-on-empty-changeset
                     '''
                 }
             }
